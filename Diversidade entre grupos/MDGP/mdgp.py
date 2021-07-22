@@ -85,32 +85,48 @@ class MDGP:
         return schedule
 
     @staticmethod
-    def exponential_schedule(T0, iters, beta):
-        schedule = []
-        for t in reversed(range(1, iters+1)):
+    def exponential_schedule(T0, TMin, beta):
+        schedule = [T0]
+        T = T0
+        t = 1
+        while(T>TMin):
             T = T0*beta**t
             if T > 0:
                 schedule.append(T)
+                t+=1
+            else:
+                break
 
         return schedule
 
     @staticmethod
-    def linear_schedule(T0, iters, beta):
-        schedule = []
-        for t in reversed(range(1, iters+1)):
+    def linear_schedule(T0, TMin, beta):
+        schedule = [T0]
+        T = T0
+        t = 1
+        while(T>TMin):
             T = T0-beta*t
             if T > 0:
                 schedule.append(T)
+                t+=1
+            else:
+                break
 
         return schedule
 
     @staticmethod
-    def log_schedule(iters, a, b):
-        schedule = []
-        for t in range(1, iters+1):
-            if np.log(t+b) > 0:
-                T = a/np.log(t+b)
+    def log_schedule(TMin, a, b):
+        t = 1
+        T = a/np.log(t+b)
+        schedule = [T]
+        while(T>TMin):
+            #print(T)
+            T = a/np.log(t+b)
+            if(T>0):
                 schedule.append(T)
+                t+=1
+            else:
+                break
 
         return schedule
 
