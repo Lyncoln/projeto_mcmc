@@ -2,6 +2,7 @@ import numpy as np
 import random
 import itertools
 import math
+import pandas as pd
 
 
 class MDGP:
@@ -146,3 +147,17 @@ class MDGP:
             final_best_cost = best_cost
 
         return final_best_cost, final_best
+
+    def simulated_annealing_with_exec_log(self, cooling_schedule, save_as):
+        state = self.initial_state
+        best = self.initial_state
+        results = []
+        for T in cooling_schedule:
+            neighbor = self._generate_neighbors(state)
+
+            state, state_cost, best, best_cost = self._switch_states(state, neighbor, self.distance_matrix, T, best)
+
+            results.append([T, state_cost, state, best_cost, best])
+        
+        df = pd.DataFrame(results, columns=['T','state_cost', 'state','best_cost','best'])
+        df.to_csv(f'{save_as}.csv')

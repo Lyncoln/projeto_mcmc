@@ -13,7 +13,8 @@ class Students:
 
     def get_name_distance_matrix(self, student_class: str) -> np.array:
         students = self.students.copy()
-        students = students.loc[students['turma'] == student_class]
+        if not student_class == 'all':
+            students = students.loc[students['turma'] == student_class]
 
         students_combs = students.pivot_table(index='nome_aluno', columns='nome_aluno', values=None)
         students_combs.columns = students_combs.columns.droplevel()
